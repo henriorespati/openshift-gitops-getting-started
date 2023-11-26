@@ -1,0 +1,69 @@
+apiVersion: v1
+items:
+- apiVersion: triggers.tekton.dev/v1alpha1
+  kind: TriggerTemplate
+  metadata:
+    creationTimestamp: "2023-11-25T04:32:16Z"
+    generation: 1
+    managedFields:
+    - apiVersion: triggers.tekton.dev/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:params: {}
+          f:resourcetemplates: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:16Z"
+    name: petclinic-trigger-template
+    namespace: ocp-workshop
+    resourceVersion: "78973"
+    selfLink: /apis/triggers.tekton.dev/v1alpha1/namespaces/ocp-workshop/triggertemplates/petclinic-trigger-template
+    uid: 423d4294-d160-4105-a9b6-b4330db9e40a
+  spec:
+    params:
+    - default: master
+      description: The git revision
+      name: gitrevision
+    - default: master
+      description: The short commit sha
+      name: gitshortsha
+    - default: master
+      description: The branch name
+      name: gitbranchname
+    - description: The git repository url
+      name: gitrepositoryurl
+    - default: This is the default message
+      description: The message to print
+      name: message
+    - description: The Content-Type of the event
+      name: contenttype
+    resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: petclinic-build-dev
+        labels:
+          tekton.dev/pipeline: petclinic-build-dev
+      spec:
+        params:
+        - name: APP_SOURCE_GIT
+          value: $(tt.params.gitrepositoryurl)
+        - name: APP_SOURCE_REVISION
+          value: $(tt.params.gitrevision)
+        - name: APP_IMAGE_TAG
+          value: $(tt.params.gitbranchname)-$(tt.params.gitshortsha)
+        pipelineRef:
+          name: petclinic-build-dev
+        workspaces:
+        - configMap:
+            name: maven-settings
+          name: maven-settings
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: petclinic-build-workspace
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

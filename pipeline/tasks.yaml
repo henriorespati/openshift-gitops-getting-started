@@ -1,0 +1,860 @@
+apiVersion: v1
+items:
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/displayName: argocd
+      tekton.dev/pipelines.minVersion: 0.12.1
+      tekton.dev/tags: deploy
+    creationTimestamp: "2023-11-25T04:31:56Z"
+    generation: 3
+    labels:
+      app.kubernetes.io/version: "0.1"
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/displayName: {}
+            f:tekton.dev/pipelines.minVersion: {}
+            f:tekton.dev/tags: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/version: {}
+        f:spec:
+          .: {}
+          f:description: {}
+          f:stepTemplate:
+            .: {}
+            f:envFrom: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:31:56Z"
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:params: {}
+          f:steps: {}
+      manager: Mozilla
+      operation: Update
+      time: "2023-11-26T05:02:38Z"
+    name: argocd-task-sync-and-wait
+    namespace: ocp-workshop
+    resourceVersion: "1105257"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/argocd-task-sync-and-wait
+    uid: d7487ffa-9117-4016-a682-4253b0a73e5c
+  spec:
+    description: |-
+      This task syncs (deploys) an Argo CD application and waits for it to be healthy.
+      To do so, it requires the address of the Argo CD server and some form of authentication either a username/password or an authentication token.
+    params:
+    - description: name of the application to sync
+      name: application-name
+      type: string
+    - default: HEAD
+      description: the revision to sync to
+      name: revision
+      type: string
+    - default: --
+      name: flags
+      type: string
+    - default: latest
+      name: argocd-version
+      type: string
+    stepTemplate:
+      envFrom:
+      - configMapRef:
+          name: argocd-env-configmap
+      - secretRef:
+          name: argocd-env-secret
+      name: ""
+      resources: {}
+    steps:
+    - image: quay.io/argoproj/argocd:$(params.argocd-version)
+      name: login-wait
+      resources: {}
+      script: |
+        if [ -z $ARGOCD_AUTH_TOKEN ]; then
+          yes | argocd login $ARGOCD_SERVER --username=$ARGOCD_USERNAME --password=$ARGOCD_PASSWORD;
+        fi
+    - image: quay.io/argoproj/argocd:$(params.argocd-version)
+      name: sync
+      resources: {}
+      script: |
+        argocd app sync $(params.application-name) --revision $(params.revision) $(params.flags)
+    - image: quay.io/argoproj/argocd:$(params.argocd-version)
+      name: wait
+      resources: {}
+      script: |
+        argocd app wait $(params.application-name) --health $(params.flags)
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/pipelines.minVersion: 0.12.1
+    creationTimestamp: "2023-11-25T04:31:57Z"
+    generation: 1
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/pipelines.minVersion: {}
+        f:spec:
+          .: {}
+          f:params: {}
+          f:steps: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:31:57Z"
+    name: dependency-report
+    namespace: ocp-workshop
+    resourceVersion: "78627"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/dependency-report
+    uid: 6f3e6218-88f5-436d-8765-64bdaf39ab25
+  spec:
+    params:
+    - default: .
+      description: The directory within the workspace where application source is located
+      name: SOURCE_DIR
+      type: string
+    - default: http://reports-repo:8080
+      description: The reports repository host based on https://github.com/chmouel/openshift-django-uploader
+      name: REPORTS_REPO_HOST
+      type: string
+    - default: reports
+      description: The reports repository username
+      name: REPORTS_REPO_USERNAME
+      type: string
+    - default: reports
+      description: The reports repository password
+      name: REPORTS_REPO_PASSWORD
+      type: string
+    - default: ""
+      description: The Maven repository mirror url
+      name: MAVEN_MIRROR_URL
+      type: string
+    - default: ""
+      description: The username for the proxy server
+      name: PROXY_USER
+      type: string
+    - default: ""
+      description: The password for the proxy server
+      name: PROXY_PASSWORD
+      type: string
+    - default: ""
+      description: Port number for the proxy server
+      name: PROXY_PORT
+      type: string
+    - default: ""
+      description: Proxy server Host
+      name: PROXY_HOST
+      type: string
+    - default: ""
+      description: Non proxy server host
+      name: PROXY_NON_PROXY_HOSTS
+      type: string
+    - default: http
+      description: Protocol for the proxy ie http or https
+      name: PROXY_PROTOCOL
+      type: string
+    steps:
+    - image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+      name: mvn-settings
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        [[ -f $(workspaces.maven-settings.path)/settings.xml ]] && \
+        echo 'using existing $(workspaces.maven-settings.path)/settings.xml' && exit 0
+
+        cat > $(workspaces.maven-settings.path)/settings.xml <<EOF
+        <settings>
+          <mirrors>
+            <!-- The mirrors added here are generated from environment variables. Don't change. -->
+            <!-- ### mirrors from ENV ### -->
+          </mirrors>
+          <proxies>
+            <!-- The proxies added here are generated from environment variables. Don't change. -->
+            <!-- ### HTTP proxy from ENV ### -->
+          </proxies>
+        </settings>
+        EOF
+
+        xml=""
+        if [ -n "$(params.PROXY_HOST)" -a -n "$(params.PROXY_PORT)" ]; then
+          xml="<proxy>\
+            <id>genproxy</id>\
+            <active>true</active>\
+            <protocol>$(params.PROXY_PROTOCOL)</protocol>\
+            <host>$(params.PROXY_HOST)</host>\
+            <port>$(params.PROXY_PORT)</port>"
+          if [ -n "$(params.PROXY_USER)" -a -n "$(params.PROXY_PASSWORD)" ]; then
+            xml="$xml\
+                <username>$(params.PROXY_USER)</username>\
+                <password>$(params.PROXY_PASSWORD)</password>"
+          fi
+          if [ -n "$(params.PROXY_NON_PROXY_HOSTS)" ]; then
+            xml="$xml\
+                <nonProxyHosts>$(params.PROXY_NON_PROXY_HOSTS)</nonProxyHosts>"
+          fi
+          xml="$xml\
+              </proxy>"
+          sed -i "s|<!-- ### HTTP proxy from ENV ### -->|$xml|" $(workspaces.maven-settings.path)/settings.xml
+        fi
+
+        if [ -n "$(params.MAVEN_MIRROR_URL)" ]; then
+          xml="    <mirror>\
+            <id>mirror.default</id>\
+            <url>$(params.MAVEN_MIRROR_URL)</url>\
+            <mirrorOf>central</mirrorOf>\
+          </mirror>"
+          sed -i "s|<!-- ### mirrors from ENV ### -->|$xml|" $(workspaces.maven-settings.path)/settings.xml
+        fi
+    - args:
+      - -Dmaven.repo.local=$(workspaces.source.path)/.m2
+      - -f
+      - $(params.SOURCE_DIR)
+      - -s
+      - $(workspaces.maven-settings.path)/settings.xml
+      - site
+      - -DskipTests=true
+      command:
+      - /usr/bin/mvn
+      image: gcr.io/cloud-builders/mvn
+      name: mvn-goals
+      resources: {}
+      workingDir: $(workspaces.source.path)
+    - env:
+      - name: PIPELINERUN_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tekton.dev/pipelineRun']
+      image: registry.access.redhat.com/ubi8/ubi:latest
+      name: archive-site
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        for f in $(find $(params.SOURCE_DIR)/target/site -type f); do
+          curl -u $(params.REPORTS_REPO_USERNAME):$(params.REPORTS_REPO_PASSWORD) -F path=$PIPELINERUN_NAME/${f} -X POST -F file=@${f} $(params.REPORTS_REPO_HOST)/upload; echo ""
+        done
+      workingDir: $(workspaces.source.path)
+    workspaces:
+    - description: The workspace consisting of maven project.
+      name: source
+    - description: The workspace consisting of the custom maven settings provided by the user.
+      name: maven-settings
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    creationTimestamp: "2023-11-25T04:31:58Z"
+    generation: 1
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          .: {}
+          f:params: {}
+          f:steps: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:31:58Z"
+    name: gatling
+    namespace: ocp-workshop
+    resourceVersion: "78657"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/gatling
+    uid: 4ca99d2e-a560-4159-be91-59f8cf865556
+  spec:
+    params:
+    - default: "30"
+      description: The duration of running simulations
+      name: DURATION
+      type: string
+    - default: "10"
+      description: The number of concurrent users
+      name: CONCURRENT_USERS
+      type: string
+    - description: The application under test url
+      name: APP_URL
+      type: string
+    - default: http://reports-repo:8080
+      description: The reports repository host based on https://github.com/chmouel/openshift-django-uploader
+      name: REPORTS_REPO_HOST
+      type: string
+    - default: reports
+      description: The reports repository username
+      name: REPORTS_REPO_USERNAME
+      type: string
+    - default: reports
+      description: The reports repository password
+      name: REPORTS_REPO_PASSWORD
+      type: string
+    steps:
+    - env:
+      - name: PIPELINERUN_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tekton.dev/pipelineRun']
+      image: quay.io/siamaksade/gatling:latest
+      name: run-tests
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        set -x
+
+        cd /opt/gatling/
+        ls -lhrt
+
+        # set simulation params
+        export JAVA_OPTS="-DtestDuration=$(params.CONCURRENT_USERS) -DuserCount=$(params.DURATION) -Dserver=$(params.APP_URL)"
+
+        # run simulation
+        /opt/gatling/bin/gatling.sh -rd "Spring PetClinic Performance Test" -sf $(workspaces.simulations.path)
+
+        # upload results
+        REPORT=$(ls -td /opt/gatling/results/* | head -1)
+        for f in $(find $REPORT/ -type f); do
+          curl -u $(params.REPORTS_REPO_USERNAME):$(params.REPORTS_REPO_PASSWORD) -F path=$PIPELINERUN_NAME${f#/opt/gatling/results} -X POST -F file=@${f} $(params.REPORTS_REPO_HOST)/upload; echo ""
+        done
+    workspaces:
+    - description: The workspace consisting of maven project.
+      name: simulations
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/pipelines.minVersion: 0.12.1
+      tekton.dev/tags: git
+    creationTimestamp: "2023-11-25T04:32:00Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/version: "0.1"
+      operator.tekton.dev/provider-type: community
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/pipelines.minVersion: {}
+            f:tekton.dev/tags: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/version: {}
+            f:operator.tekton.dev/provider-type: {}
+        f:spec:
+          .: {}
+          f:description: {}
+          f:params: {}
+          f:results: {}
+          f:steps: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:00Z"
+    name: git-update-deployment
+    namespace: ocp-workshop
+    resourceVersion: "78682"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/git-update-deployment
+    uid: 6ba6fb03-5a9d-4b7e-a2d8-0b9d2d310361
+  spec:
+    description: This Task can be used to update image digest in a Git repo using kustomize
+    params:
+    - name: GIT_REPOSITORY
+      type: string
+    - name: GIT_USERNAME
+      type: string
+    - name: GIT_PASSWORD
+      type: string
+    - name: CURRENT_IMAGE
+      type: string
+    - name: NEW_IMAGE
+      type: string
+    - name: NEW_DIGEST
+      type: string
+    - name: KUSTOMIZATION_PATH
+      type: string
+    results:
+    - description: The commit SHA
+      name: commit
+    steps:
+    - image: quay.io/rcarrata/git:v2.26.2
+      name: git-clone
+      resources: {}
+      script: |
+        rm -rf git-update-digest-workdir
+        git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
+      workingDir: $(workspaces.workspace.path)
+    - image: k8s.gcr.io/kustomize/kustomize:v3.8.7
+      name: update-digest
+      resources: {}
+      script: |
+        cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
+        /app/kustomize edit set image $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
+
+        echo "##########################"
+        echo "### kustomization.yaml ###"
+        echo "##########################"
+        cat kustomization.yaml
+      workingDir: $(workspaces.workspace.path)
+    - image: quay.io/rcarrata/git:v2.26.2
+      name: git-commit
+      resources: {}
+      script: |
+        cd git-update-digest-workdir
+        git config user.email "tekton-pipelines-ci@redhat.com"
+        git config user.name "tekton-pipelines-ci"
+
+        git status
+        git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
+        # git commit -m "[$(context.pipelineRun.name)] Image digest updated"
+        git commit -m "[ci] Image digest updated"
+
+        git remote add auth-origin $(echo $(params.GIT_REPOSITORY) | sed -E "s#http://(.*)#http://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@\1#g")
+        git push auth-origin master
+
+        RESULT_SHA="$(git rev-parse HEAD | tr -d '\n')"
+        EXIT_CODE="$?"
+        if [ "$EXIT_CODE" != 0 ]
+        then
+          exit $EXIT_CODE
+        fi
+        # Make sure we don't add a trailing newline to the result!
+        echo -n "$RESULT_SHA" > $(results.commit.path)
+      workingDir: $(workspaces.workspace.path)
+    workspaces:
+    - description: The workspace consisting of maven project.
+      name: workspace
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/pipelines.minVersion: 0.12.1
+      tekton.dev/tags: build-tool
+    creationTimestamp: "2023-11-25T04:32:04Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/version: "0.1"
+      operator.tekton.dev/provider-type: community
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/pipelines.minVersion: {}
+            f:tekton.dev/tags: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/version: {}
+            f:operator.tekton.dev/provider-type: {}
+        f:spec:
+          .: {}
+          f:description: {}
+          f:params: {}
+          f:steps: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:04Z"
+    name: maven
+    namespace: ocp-workshop
+    resourceVersion: "78745"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/maven
+    uid: 7d8d1a22-9bd7-47b2-96d3-9215eb488827
+  spec:
+    description: This Task can be used to run a Maven build.
+    params:
+    - default: gcr.io/cloud-builders/mvn:3.5.0-jdk-8
+      description: Maven base image
+      name: MAVEN_IMAGE
+      type: string
+    - default:
+      - package
+      description: maven goals to run
+      name: GOALS
+      type: array
+    - default: ""
+      description: The Maven repository mirror url
+      name: MAVEN_MIRROR_URL
+      type: string
+    - default: ""
+      description: The username for the proxy server
+      name: PROXY_USER
+      type: string
+    - default: ""
+      description: The password for the proxy server
+      name: PROXY_PASSWORD
+      type: string
+    - default: ""
+      description: Port number for the proxy server
+      name: PROXY_PORT
+      type: string
+    - default: ""
+      description: Proxy server Host
+      name: PROXY_HOST
+      type: string
+    - default: ""
+      description: Non proxy server host
+      name: PROXY_NON_PROXY_HOSTS
+      type: string
+    - default: http
+      description: Protocol for the proxy ie http or https
+      name: PROXY_PROTOCOL
+      type: string
+    steps:
+    - image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+      name: mvn-settings
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        [[ -f $(workspaces.maven-settings.path)/settings.xml ]] && \
+        echo 'using existing $(workspaces.maven-settings.path)/settings.xml' && exit 0
+
+        cat > $(workspaces.maven-settings.path)/settings.xml <<EOF
+        <settings>
+          <mirrors>
+            <!-- The mirrors added here are generated from environment variables. Don't change. -->
+            <!-- ### mirrors from ENV ### -->
+          </mirrors>
+          <proxies>
+            <!-- The proxies added here are generated from environment variables. Don't change. -->
+            <!-- ### HTTP proxy from ENV ### -->
+          </proxies>
+        </settings>
+        EOF
+
+        xml=""
+        if [ -n "$(params.PROXY_HOST)" -a -n "$(params.PROXY_PORT)" ]; then
+          xml="<proxy>\
+            <id>genproxy</id>\
+            <active>true</active>\
+            <protocol>$(params.PROXY_PROTOCOL)</protocol>\
+            <host>$(params.PROXY_HOST)</host>\
+            <port>$(params.PROXY_PORT)</port>"
+          if [ -n "$(params.PROXY_USER)" -a -n "$(params.PROXY_PASSWORD)" ]; then
+            xml="$xml\
+                <username>$(params.PROXY_USER)</username>\
+                <password>$(params.PROXY_PASSWORD)</password>"
+          fi
+          if [ -n "$(params.PROXY_NON_PROXY_HOSTS)" ]; then
+            xml="$xml\
+                <nonProxyHosts>$(params.PROXY_NON_PROXY_HOSTS)</nonProxyHosts>"
+          fi
+          xml="$xml\
+              </proxy>"
+          sed -i "s|<!-- ### HTTP proxy from ENV ### -->|$xml|" $(workspaces.maven-settings.path)/settings.xml
+        fi
+
+        if [ -n "$(params.MAVEN_MIRROR_URL)" ]; then
+          xml="    <mirror>\
+            <id>mirror.default</id>\
+            <url>$(params.MAVEN_MIRROR_URL)</url>\
+            <mirrorOf>central</mirrorOf>\
+          </mirror>"
+          sed -i "s|<!-- ### mirrors from ENV ### -->|$xml|" $(workspaces.maven-settings.path)/settings.xml
+        fi
+    - args:
+      - -Dmaven.repo.local=$(workspaces.source.path)/.m2
+      - -s
+      - $(workspaces.maven-settings.path)/settings.xml
+      - $(params.GOALS)
+      command:
+      - /usr/bin/mvn
+      image: $(params.MAVEN_IMAGE)
+      name: mvn-goals
+      resources:
+        limits:
+          cpu: "1"
+          memory: 4Gi
+        requests:
+          cpu: 200m
+          memory: 512Mi
+      workingDir: $(workspaces.source.path)
+    workspaces:
+    - description: The workspace consisting of maven project.
+      name: source
+    - description: The workspace consisting of the custom maven settings provided by the user.
+      name: maven-settings
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/displayName: s2i java 11
+      tekton.dev/pipelines.minVersion: 0.11.3
+      tekton.dev/tags: s2i, java, workspace
+    creationTimestamp: "2023-11-25T04:32:08Z"
+    generation: 1
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/displayName: {}
+            f:tekton.dev/pipelines.minVersion: {}
+            f:tekton.dev/tags: {}
+        f:spec:
+          .: {}
+          f:description: {}
+          f:params: {}
+          f:results: {}
+          f:steps: {}
+          f:volumes: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:08Z"
+    name: s2i-java-11
+    namespace: ocp-workshop
+    resourceVersion: "78816"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/s2i-java-11
+    uid: 686234f3-b676-49eb-a7e6-ee14c1448a6b
+  spec:
+    description: s2i-java-11 task clones a Git repository and builds and pushes a container image using S2I and a Java 11 builder image.
+    params:
+    - default: .
+      description: The location of the path to run s2i from
+      name: PATH_CONTEXT
+      type: string
+    - default: "true"
+      description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+      name: TLSVERIFY
+      type: string
+    - default: ""
+      description: Additional Maven arguments
+      name: MAVEN_ARGS_APPEND
+      type: string
+    - default: "false"
+      description: Remove the Maven repository after the artifact is built
+      name: MAVEN_CLEAR_REPO
+      type: string
+    - default: ""
+      description: The base URL of a mirror used for retrieving artifacts
+      name: MAVEN_MIRROR_URL
+      type: string
+    - description: Location of the repo where image has to be pushed
+      name: IMAGE_NAME
+      type: string
+    - default: latest
+      description: The tag of the image to be pushed
+      name: IMAGE_TAG
+      type: string
+    results:
+    - description: Digest of the image just built.
+      name: IMAGE_DIGEST
+    steps:
+    - args:
+      - |-
+        echo "MAVEN_CLEAR_REPO=$(params.MAVEN_CLEAR_REPO)" > env-file
+
+        [[ '$(params.MAVEN_ARGS_APPEND)' != "" ]] &&
+          echo "MAVEN_ARGS_APPEND=$(params.MAVEN_ARGS_APPEND)" >> env-file
+
+        [[ '$(params.MAVEN_MIRROR_URL)' != "" ]] &&
+          echo "MAVEN_MIRROR_URL=$(params.MAVEN_MIRROR_URL)" >> env-file
+
+        echo "Generated Env file"
+        echo "------------------------------"
+        cat env-file
+        echo "------------------------------"
+      command:
+      - /bin/sh
+      - -c
+      image: registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8@sha256:562dbdac04ae9260e21d457585b3251fd8cc5310966f8fc544fb77dc544c92f8
+      name: gen-env-file
+      resources: {}
+      volumeMounts:
+      - mountPath: /env-params
+        name: envparams
+      workingDir: /env-params
+    - command:
+      - s2i
+      - build
+      - $(params.PATH_CONTEXT)
+      - image-registry.openshift-image-registry.svc:5000/openshift/java:11
+      - --image-scripts-url
+      - image:///usr/local/s2i
+      - --as-dockerfile
+      - /gen-source/Dockerfile.gen
+      - --environment-file
+      - /env-params/env-file
+      image: registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8@sha256:562dbdac04ae9260e21d457585b3251fd8cc5310966f8fc544fb77dc544c92f8
+      name: generate
+      resources: {}
+      volumeMounts:
+      - mountPath: /gen-source
+        name: gen-source
+      - mountPath: /env-params
+        name: envparams
+      workingDir: $(workspaces.source.path)
+    - command:
+      - buildah
+      - bud
+      - --storage-driver=vfs
+      - --tls-verify=$(params.TLSVERIFY)
+      - --layers
+      - -f
+      - /gen-source/Dockerfile.gen
+      - -t
+      - $(params.IMAGE_NAME):$(params.IMAGE_TAG)
+      - -t
+      - $(params.IMAGE_NAME):latest
+      - .
+      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      name: build
+      resources: {}
+      volumeMounts:
+      - mountPath: /var/lib/containers
+        name: varlibcontainers
+      - mountPath: /gen-source
+        name: gen-source
+      workingDir: /gen-source
+    - command:
+      - buildah
+      - push
+      - --storage-driver=vfs
+      - --tls-verify=$(params.TLSVERIFY)
+      - --digestfile
+      - $(workspaces.source.path)/image-digest
+      - $(params.IMAGE_NAME):$(params.IMAGE_TAG)
+      - docker://$(params.IMAGE_NAME):$(params.IMAGE_TAG)
+      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      name: push-tag
+      resources: {}
+      volumeMounts:
+      - mountPath: /var/lib/containers
+        name: varlibcontainers
+    - command:
+      - buildah
+      - push
+      - --storage-driver=vfs
+      - --tls-verify=$(params.TLSVERIFY)
+      - --digestfile
+      - $(workspaces.source.path)/image-digest
+      - $(params.IMAGE_NAME):$(params.IMAGE_TAG)
+      - docker://$(params.IMAGE_NAME):latest
+      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      name: push-latest
+      resources: {}
+      volumeMounts:
+      - mountPath: /var/lib/containers
+        name: varlibcontainers
+    - image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      name: digest-to-results
+      resources: {}
+      script: cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
+    volumes:
+    - emptyDir: {}
+      name: varlibcontainers
+    - emptyDir: {}
+      name: gen-source
+    - emptyDir: {}
+      name: envparams
+    workspaces:
+    - mountPath: /workspace/source
+      name: source
+- apiVersion: tekton.dev/v1beta1
+  kind: Task
+  metadata:
+    annotations:
+      tekton.dev/pipelines.minVersion: 0.12.1
+      tekton.dev/tags: git
+    creationTimestamp: "2023-11-25T04:32:10Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/version: "0.1"
+      operator.tekton.dev/provider-type: community
+    managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:tekton.dev/pipelines.minVersion: {}
+            f:tekton.dev/tags: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/version: {}
+            f:operator.tekton.dev/provider-type: {}
+        f:spec:
+          .: {}
+          f:description: {}
+          f:params: {}
+          f:steps: {}
+          f:workspaces: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:10Z"
+    name: zap-proxy
+    namespace: ocp-workshop
+    resourceVersion: "78848"
+    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/zap-proxy
+    uid: 043225ae-76e3-4383-8a07-99b126757993
+  spec:
+    description: This Task can be used to update image digest in a Git repo using kustomize
+    params:
+    - default: reports
+      description: The reports repository username
+      name: REPORTS_REPO_USERNAME
+      type: string
+    - default: reports
+      description: The reports repository password
+      name: REPORTS_REPO_PASSWORD
+      type: string
+    - description: The application under test url
+      name: APP_URL
+      type: string
+    - default: http://reports-repo:8080
+      description: The reports repository host based on https://github.com/chmouel/openshift-django-uploader
+      name: REPORTS_REPO_HOST
+      type: string
+    steps:
+    - env:
+      - name: PIPELINERUN_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['tekton.dev/pipelineRun']
+      image: quay.io/rcarrata/zap2docker-stable:latest
+      name: zap-proxy
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        set -x
+
+        echo "Make the wrk directory available to save the reports"
+        cd /zap
+        mkdir /zap/wrk
+
+        echo "Starting the pentesting..."
+        /zap/zap-baseline.py -t $(params.APP_URL) -r $PIPELINERUN_NAME.html
+
+        ls -lhrt /zap/wrk
+
+        echo "Uploading the report into the report server"
+        curl -u $(params.REPORTS_REPO_USERNAME):$(params.REPORTS_REPO_PASSWORD) -F path=$PIPELINERUN_NAME.html -F file=/zap/wrk/$PIPELINERUN_NAME.html -X POST $(params.REPORTS_REPO_HOST)/upload; echo ""
+      workingDir: $(workspaces.workspace.path)
+    workspaces:
+    - description: The workspace for the zap proxy task
+      name: workspace
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

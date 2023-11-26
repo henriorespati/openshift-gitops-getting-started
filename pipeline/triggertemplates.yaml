@@ -3,24 +3,7 @@ items:
 - apiVersion: triggers.tekton.dev/v1alpha1
   kind: TriggerTemplate
   metadata:
-    creationTimestamp: "2023-11-25T04:32:16Z"
-    generation: 1
-    managedFields:
-    - apiVersion: triggers.tekton.dev/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          .: {}
-          f:params: {}
-          f:resourcetemplates: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:16Z"
     name: petclinic-trigger-template
-    namespace: ocp-workshop
-    resourceVersion: "78973"
-    selfLink: /apis/triggers.tekton.dev/v1alpha1/namespaces/ocp-workshop/triggertemplates/petclinic-trigger-template
-    uid: 423d4294-d160-4105-a9b6-b4330db9e40a
   spec:
     params:
     - default: master

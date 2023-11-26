@@ -3,45 +3,9 @@ items:
 - apiVersion: triggers.tekton.dev/v1alpha1
   kind: EventListener
   metadata:
-    creationTimestamp: "2023-11-25T04:32:11Z"
     finalizers:
     - eventlisteners.triggers.tekton.dev
-    generation: 1
-    managedFields:
-    - apiVersion: triggers.tekton.dev/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          .: {}
-          f:serviceAccountName: {}
-          f:triggers: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:11Z"
-    - apiVersion: triggers.tekton.dev/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:finalizers:
-            .: {}
-            v:"eventlisteners.triggers.tekton.dev": {}
-        f:status:
-          .: {}
-          f:address:
-            .: {}
-            f:url: {}
-          f:conditions: {}
-          f:configuration:
-            .: {}
-            f:generatedName: {}
-      manager: openshift-pipelines-triggers-controller
-      operation: Update
-      time: "2023-11-25T04:32:11Z"
     name: webhook
-    namespace: ocp-workshop
-    resourceVersion: "79155"
-    selfLink: /apis/triggers.tekton.dev/v1alpha1/namespaces/ocp-workshop/eventlisteners/webhook
-    uid: 06f37cee-1124-4d8d-a967-dd0e225f2865
   spec:
     namespaceSelector: {}
     podTemplate: {}
@@ -61,30 +25,6 @@ items:
       name: petclinic-webhook
       template:
         ref: petclinic-trigger-template
-  status:
-    address:
-      url: http://el-webhook.ocp-workshop.svc.cluster.local:8080
-    conditions:
-    - lastTransitionTime: "2023-11-25T04:32:26Z"
-      message: Deployment has minimum availability.
-      reason: MinimumReplicasAvailable
-      status: "True"
-      type: Available
-    - lastTransitionTime: "2023-11-25T04:32:26Z"
-      message: Deployment exists
-      status: "True"
-      type: Deployment
-    - lastTransitionTime: "2023-11-25T04:32:26Z"
-      message: ReplicaSet "el-webhook-574dbb7b76" has successfully progressed.
-      reason: NewReplicaSetAvailable
-      status: "True"
-      type: Progressing
-    - lastTransitionTime: "2023-11-25T04:32:26Z"
-      message: Service exists
-      status: "True"
-      type: Service
-    configuration:
-      generatedName: el-webhook
 kind: List
 metadata:
   resourceVersion: ""

@@ -7,46 +7,9 @@ items:
       tekton.dev/displayName: argocd
       tekton.dev/pipelines.minVersion: 0.12.1
       tekton.dev/tags: deploy
-    creationTimestamp: "2023-11-25T04:31:56Z"
-    generation: 3
     labels:
       app.kubernetes.io/version: "0.1"
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/displayName: {}
-            f:tekton.dev/pipelines.minVersion: {}
-            f:tekton.dev/tags: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/version: {}
-        f:spec:
-          .: {}
-          f:description: {}
-          f:stepTemplate:
-            .: {}
-            f:envFrom: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:31:56Z"
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          f:params: {}
-          f:steps: {}
-      manager: Mozilla
-      operation: Update
-      time: "2023-11-26T05:02:38Z"
     name: argocd-task-sync-and-wait
-    namespace: ocp-workshop
-    resourceVersion: "1105257"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/argocd-task-sync-and-wait
-    uid: d7487ffa-9117-4016-a682-4253b0a73e5c
   spec:
     description: |-
       This task syncs (deploys) an Argo CD application and waits for it to be healthy.
@@ -96,29 +59,7 @@ items:
   metadata:
     annotations:
       tekton.dev/pipelines.minVersion: 0.12.1
-    creationTimestamp: "2023-11-25T04:31:57Z"
-    generation: 1
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/pipelines.minVersion: {}
-        f:spec:
-          .: {}
-          f:params: {}
-          f:steps: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:31:57Z"
     name: dependency-report
-    namespace: ocp-workshop
-    resourceVersion: "78627"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/dependency-report
-    uid: 6f3e6218-88f5-436d-8765-64bdaf39ab25
   spec:
     params:
     - default: .
@@ -255,25 +196,7 @@ items:
 - apiVersion: tekton.dev/v1beta1
   kind: Task
   metadata:
-    creationTimestamp: "2023-11-25T04:31:58Z"
-    generation: 1
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          .: {}
-          f:params: {}
-          f:steps: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:31:58Z"
     name: gatling
-    namespace: ocp-workshop
-    resourceVersion: "78657"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/gatling
-    uid: 4ca99d2e-a560-4159-be91-59f8cf865556
   spec:
     params:
     - default: "30"
@@ -336,39 +259,10 @@ items:
     annotations:
       tekton.dev/pipelines.minVersion: 0.12.1
       tekton.dev/tags: git
-    creationTimestamp: "2023-11-25T04:32:00Z"
-    generation: 1
     labels:
       app.kubernetes.io/version: "0.1"
       operator.tekton.dev/provider-type: community
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/pipelines.minVersion: {}
-            f:tekton.dev/tags: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/version: {}
-            f:operator.tekton.dev/provider-type: {}
-        f:spec:
-          .: {}
-          f:description: {}
-          f:params: {}
-          f:results: {}
-          f:steps: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:00Z"
     name: git-update-deployment
-    namespace: ocp-workshop
-    resourceVersion: "78682"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/git-update-deployment
-    uid: 6ba6fb03-5a9d-4b7e-a2d8-0b9d2d310361
   spec:
     description: This Task can be used to update image digest in a Git repo using kustomize
     params:
@@ -443,38 +337,10 @@ items:
     annotations:
       tekton.dev/pipelines.minVersion: 0.12.1
       tekton.dev/tags: build-tool
-    creationTimestamp: "2023-11-25T04:32:04Z"
-    generation: 1
     labels:
       app.kubernetes.io/version: "0.1"
       operator.tekton.dev/provider-type: community
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/pipelines.minVersion: {}
-            f:tekton.dev/tags: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/version: {}
-            f:operator.tekton.dev/provider-type: {}
-        f:spec:
-          .: {}
-          f:description: {}
-          f:params: {}
-          f:steps: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:04Z"
     name: maven
-    namespace: ocp-workshop
-    resourceVersion: "78745"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/maven
-    uid: 7d8d1a22-9bd7-47b2-96d3-9215eb488827
   spec:
     description: This Task can be used to run a Maven build.
     params:
@@ -597,34 +463,7 @@ items:
       tekton.dev/displayName: s2i java 11
       tekton.dev/pipelines.minVersion: 0.11.3
       tekton.dev/tags: s2i, java, workspace
-    creationTimestamp: "2023-11-25T04:32:08Z"
-    generation: 1
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/displayName: {}
-            f:tekton.dev/pipelines.minVersion: {}
-            f:tekton.dev/tags: {}
-        f:spec:
-          .: {}
-          f:description: {}
-          f:params: {}
-          f:results: {}
-          f:steps: {}
-          f:volumes: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:08Z"
     name: s2i-java-11
-    namespace: ocp-workshop
-    resourceVersion: "78816"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/s2i-java-11
-    uid: 686234f3-b676-49eb-a7e6-ee14c1448a6b
   spec:
     description: s2i-java-11 task clones a Git repository and builds and pushes a container image using S2I and a Java 11 builder image.
     params:
@@ -775,38 +614,10 @@ items:
     annotations:
       tekton.dev/pipelines.minVersion: 0.12.1
       tekton.dev/tags: git
-    creationTimestamp: "2023-11-25T04:32:10Z"
-    generation: 1
     labels:
       app.kubernetes.io/version: "0.1"
       operator.tekton.dev/provider-type: community
-    managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:tekton.dev/pipelines.minVersion: {}
-            f:tekton.dev/tags: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/version: {}
-            f:operator.tekton.dev/provider-type: {}
-        f:spec:
-          .: {}
-          f:description: {}
-          f:params: {}
-          f:steps: {}
-          f:workspaces: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:10Z"
     name: zap-proxy
-    namespace: ocp-workshop
-    resourceVersion: "78848"
-    selfLink: /apis/tekton.dev/v1beta1/namespaces/ocp-workshop/tasks/zap-proxy
-    uid: 043225ae-76e3-4383-8a07-99b126757993
   spec:
     description: This Task can be used to update image digest in a Git repo using kustomize
     params:

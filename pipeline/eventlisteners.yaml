@@ -25,3 +25,7 @@ items:
       name: petclinic-webhook
       template:
         ref: petclinic-trigger-template
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

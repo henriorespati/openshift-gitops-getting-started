@@ -3,23 +3,7 @@ items:
 - apiVersion: triggers.tekton.dev/v1alpha1
   kind: TriggerBinding
   metadata:
-    creationTimestamp: "2023-11-25T04:32:14Z"
-    generation: 1
-    managedFields:
-    - apiVersion: triggers.tekton.dev/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:spec:
-          .: {}
-          f:params: {}
-      manager: OpenAPI-Generator
-      operation: Update
-      time: "2023-11-25T04:32:14Z"
     name: gogs-triggerbinding
-    namespace: ocp-workshop
-    resourceVersion: "78939"
-    selfLink: /apis/triggers.tekton.dev/v1alpha1/namespaces/ocp-workshop/triggerbindings/gogs-triggerbinding
-    uid: 27d1a9d0-a9bb-4c0e-ad7e-6edd59801071
   spec:
     params:
     - name: gitrevision

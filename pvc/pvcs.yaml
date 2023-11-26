@@ -1,0 +1,670 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-167-73.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:06:05Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: gogs
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: oc
+      operation: Update
+      time: "2023-11-25T04:06:05Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:06:18Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:06:23Z"
+    name: gogs-data
+    namespace: ocp-workshop
+    resourceVersion: "60692"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/gogs-data
+    uid: 689b33cf-9d33-48ce-8b38-b8ba2cf25018
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-689b33cf-9d33-48ce-8b38-b8ba2cf25018
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-190-145.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:06:05Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: gogs
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: oc
+      operation: Update
+      time: "2023-11-25T04:06:05Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:06:18Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:06:23Z"
+    name: gogs-postgres-data
+    namespace: ocp-workshop
+    resourceVersion: "60687"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/gogs-postgres-data
+    uid: edba69e8-6056-4d91-b77b-843ccb1b7794
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-edba69e8-6056-4d91-b77b-843ccb1b7794
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-167-73.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:08:22Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: nexus
+      template: nexus3-persistent-template
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:template: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: oc
+      operation: Update
+      time: "2023-11-25T04:08:22Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:08:28Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:08:33Z"
+    name: nexus-pv
+    namespace: ocp-workshop
+    resourceVersion: "61454"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/nexus-pv
+    uid: e665b626-c0f5-4c0f-98d8-41c6fcfa9753
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-e665b626-c0f5-4c0f-98d8-41c6fcfa9753
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-167-73.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:32:22Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:32:22Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-26T03:38:18Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-26T03:38:23Z"
+    name: petclinic-build-workspace
+    namespace: ocp-workshop
+    resourceVersion: "1021333"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/petclinic-build-workspace
+    uid: cabee935-e561-4700-938c-d1b1fd4a5ae9
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-cabee935-e561-4700-938c-d1b1fd4a5ae9
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-167-73.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:13:38Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app.kubernetes.io/component: postgres
+      app.kubernetes.io/instance: codeready
+      app.kubernetes.io/managed-by: codeready-operator
+      app.kubernetes.io/name: codeready
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:13:38Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/instance: {}
+            f:app.kubernetes.io/managed-by: {}
+            f:app.kubernetes.io/name: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"7260ffa1-b2f4-49b7-9d93-e6bde44ad816"}:
+              .: {}
+              f:apiVersion: {}
+              f:blockOwnerDeletion: {}
+              f:controller: {}
+              f:kind: {}
+              f:name: {}
+              f:uid: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: manager
+      operation: Update
+      time: "2023-11-25T04:13:38Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:13:44Z"
+    name: postgres-data
+    namespace: ocp-workshop
+    ownerReferences:
+    - apiVersion: org.eclipse.che/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CheCluster
+      name: codeready-workspaces
+      uid: 7260ffa1-b2f4-49b7-9d93-e6bde44ad816
+    resourceVersion: "63428"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/postgres-data
+    uid: 37a8d47a-6a06-4fb6-bd52-95497b7b8015
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-37a8d47a-6a06-4fb6-bd52-95497b7b8015
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-167-73.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:31:21Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: reports-repo
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: OpenAPI-Generator
+      operation: Update
+      time: "2023-11-25T04:31:21Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:31:22Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:31:28Z"
+    name: reports-repo-pv
+    namespace: ocp-workshop
+    resourceVersion: "78147"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/reports-repo-pv
+    uid: 620f8213-6c25-4533-81d8-9e881f913820
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-620f8213-6c25-4533-81d8-9e881f913820
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-190-145.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:10:42Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:10:42Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: oc
+      operation: Update
+      time: "2023-11-25T04:10:42Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:10:47Z"
+    name: sonarqube-data
+    namespace: ocp-workshop
+    resourceVersion: "62215"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/sonarqube-data
+    uid: ee6470e3-1393-48d7-88e1-16d208ca04b5
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-ee6470e3-1393-48d7-88e1-16d208ca04b5
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+      volume.kubernetes.io/selected-node: ip-10-0-190-145.us-east-2.compute.internal
+    creationTimestamp: "2023-11-25T04:10:42Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests:
+              .: {}
+              f:storage: {}
+          f:volumeMode: {}
+      manager: oc
+      operation: Update
+      time: "2023-11-25T04:10:42Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:volume.kubernetes.io/selected-node: {}
+      manager: kube-scheduler
+      operation: Update
+      time: "2023-11-25T04:10:46Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+            f:volume.beta.kubernetes.io/storage-provisioner: {}
+        f:spec:
+          f:volumeName: {}
+        f:status:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2023-11-25T04:10:51Z"
+    name: sonarqube-postgresql
+    namespace: ocp-workshop
+    resourceVersion: "62241"
+    selfLink: /api/v1/namespaces/ocp-workshop/persistentvolumeclaims/sonarqube-postgresql
+    uid: c5a86b3f-6b8c-458c-8391-f03e371a334b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: gp2
+    volumeMode: Filesystem
+    volumeName: pvc-c5a86b3f-6b8c-458c-8391-f03e371a334b
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -8,7 +8,6 @@ items:
     name: webhook
   spec:
     namespaceSelector: {}
-    podTemplate: {}
     resources: {}
     serviceAccountName: pipeline
     triggers:

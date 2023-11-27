@@ -18,6 +18,14 @@ items:
       description: The application manifests git repository
       name: APP_MANIFESTS_GIT
       type: string
+    - default: gogsadmin
+      description: Git Username
+      name: GIT_USERNAME
+      type: string
+    - default: openshift
+      description: Git Password
+      name: GIT_PASSWORD
+      type: string
     - default: latest
       description: The application image tag to build
       name: APP_IMAGE_TAG

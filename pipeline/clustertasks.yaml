@@ -22,7 +22,7 @@ spec:
   - description: Output of `roxctl deployment check`
     name: check_output
   steps:
-  - image: quay.io/rcarrata/git:v2.26.2
+  - image: docker.io/alpine/git:latest
     name: git-clone
     resources: {}
     script: |

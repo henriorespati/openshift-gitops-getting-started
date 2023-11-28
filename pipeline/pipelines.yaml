@@ -100,7 +100,7 @@ items:
         - -DaltSnapshotDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-snapshots/
       runAfter:
       - unit-tests
-      - dependency-report
+      # - dependency-report
       taskRef:
         kind: Task
         name: maven

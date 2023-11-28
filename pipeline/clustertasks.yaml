@@ -1,25 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: ClusterTask
 metadata:
-  creationTimestamp: "2023-11-25T04:32:06Z"
-  generation: 1
-  managedFields:
-  - apiVersion: tekton.dev/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:spec:
-        .: {}
-        f:params: {}
-        f:results: {}
-        f:steps: {}
-        f:workspaces: {}
-    manager: OpenAPI-Generator
-    operation: Update
-    time: "2023-11-25T04:32:06Z"
   name: rox-deployment-check
-  resourceVersion: "78773"
-  selfLink: /apis/tekton.dev/v1beta1/clustertasks/rox-deployment-check
-  uid: 8105ba59-1eec-431e-900a-d7a089a903e6
 spec:
   params:
   - name: GIT_REPOSITORY
@@ -78,24 +60,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: ClusterTask
 metadata:
-  creationTimestamp: "2023-11-25T04:32:07Z"
-  generation: 1
-  managedFields:
-  - apiVersion: tekton.dev/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:spec:
-        .: {}
-        f:params: {}
-        f:results: {}
-        f:steps: {}
-    manager: OpenAPI-Generator
-    operation: Update
-    time: "2023-11-25T04:32:07Z"
   name: rox-image-check
-  resourceVersion: "78789"
-  selfLink: /apis/tekton.dev/v1beta1/clustertasks/rox-image-check
-  uid: 551baec7-8063-4f46-8ace-83001bd3ec3d
 spec:
   params:
   - description: Secret containing the address:port tuple for StackRox Central (example - rox.stackrox.io:443)
@@ -138,23 +103,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: ClusterTask
 metadata:
-  creationTimestamp: "2023-11-25T04:32:01Z"
-  generation: 1
-  managedFields:
-  - apiVersion: tekton.dev/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:spec:
-        .: {}
-        f:params: {}
-        f:steps: {}
-    manager: OpenAPI-Generator
-    operation: Update
-    time: "2023-11-25T04:32:01Z"
   name: rox-image-scan
-  resourceVersion: "78702"
-  selfLink: /apis/tekton.dev/v1beta1/clustertasks/rox-image-scan
-  uid: 593e543c-3bd9-46d9-ae2c-5b9faff96faa
 spec:
   params:
   - description: Secret containing the address:port tuple for StackRox Central (example - rox.stackrox.io:443)

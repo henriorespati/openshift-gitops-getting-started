@@ -284,14 +284,14 @@ items:
     - description: The commit SHA
       name: commit
     steps:
-    - image: quay.io/rcarrata/git:v2.26.2
+    - image: docker.io/alpine/git:latest
       name: git-clone
       resources: {}
       script: |
         rm -rf git-update-digest-workdir
         git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
       workingDir: $(workspaces.workspace.path)
-    - image: k8s.gcr.io/kustomize/kustomize:v3.8.7
+    - image: registry.k8s.io/kustomize/kustomize:v5.0.1
       name: update-digest
       resources: {}
       script: |
@@ -303,7 +303,7 @@ items:
         echo "##########################"
         cat kustomization.yaml
       workingDir: $(workspaces.workspace.path)
-    - image: quay.io/rcarrata/git:v2.26.2
+    - image: docker.io/alpine/git:latest
       name: git-commit
       resources: {}
       script: |
@@ -344,7 +344,7 @@ items:
   spec:
     description: This Task can be used to run a Maven build.
     params:
-    - default: gcr.io/cloud-builders/mvn:3.5.0-jdk-8
+    - default: gcr.io/cloud-builders/mvn:latest
       description: Maven base image
       name: MAVEN_IMAGE
       type: string
@@ -515,7 +515,7 @@ items:
       command:
       - /bin/sh
       - -c
-      image: registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8@sha256:562dbdac04ae9260e21d457585b3251fd8cc5310966f8fc544fb77dc544c92f8
+      image: registry.redhat.io/source-to-image/source-to-image-rhel8:v1.3.9
       name: gen-env-file
       resources: {}
       volumeMounts:
@@ -526,14 +526,14 @@ items:
       - s2i
       - build
       - $(params.PATH_CONTEXT)
-      - image-registry.openshift-image-registry.svc:5000/openshift/java:11
+      - image-registry.openshift-image-registry.svc:5000/openshift/java:openjdk-11-ubi8
       - --image-scripts-url
       - image:///usr/local/s2i
       - --as-dockerfile
       - /gen-source/Dockerfile.gen
       - --environment-file
       - /env-params/env-file
-      image: registry.redhat.io/ocp-tools-43-tech-preview/source-to-image-rhel8@sha256:562dbdac04ae9260e21d457585b3251fd8cc5310966f8fc544fb77dc544c92f8
+      image: registry.redhat.io/source-to-image/source-to-image-rhel8:v1.3.9
       name: generate
       resources: {}
       volumeMounts:
@@ -555,7 +555,7 @@ items:
       - -t
       - $(params.IMAGE_NAME):latest
       - .
-      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      image: registry.redhat.io/rhel8/buildah:latest
       name: build
       resources: {}
       volumeMounts:
@@ -573,7 +573,7 @@ items:
       - $(workspaces.source.path)/image-digest
       - $(params.IMAGE_NAME):$(params.IMAGE_TAG)
       - docker://$(params.IMAGE_NAME):$(params.IMAGE_TAG)
-      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      image: registry.redhat.io/rhel8/buildah:latest
       name: push-tag
       resources: {}
       volumeMounts:
@@ -588,13 +588,13 @@ items:
       - $(workspaces.source.path)/image-digest
       - $(params.IMAGE_NAME):$(params.IMAGE_TAG)
       - docker://$(params.IMAGE_NAME):latest
-      image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+      image: registry.redhat.io/rhel8/buildah:latest
       name: push-latest
       resources: {}
       volumeMounts:
       - mountPath: /var/lib/containers
         name: varlibcontainers
-    - image: registry.redhat.io/rhel8/buildah@sha256:180c4d9849b6ab0e5465d30d4f3a77765cf0d852ca1cb1efb59d6e8c9f90d467
+    - image: registry.redhat.io/rhel8/buildah:latest
       name: digest-to-results
       resources: {}
       script: cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
